@@ -1,4 +1,4 @@
-# Android-Nokia2-HMD
+# Android-Nokia3-HMD
 
 ## lk.bin extracted from NOKIA 3 firmware:
 ```
