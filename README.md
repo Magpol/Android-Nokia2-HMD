@@ -1,19 +1,20 @@
 # Android-Nokia2-HMD
 
-lk.bin extracted from NOKIA 3 firmware:
+## lk.bin extracted from NOKIA 3 firmware:
+```
 MT6737M__Unknown__Heart__Unknown__7.0__alps-mp-n0.mp1-V1.0.2_fih6737m.35.n_P96
 
 ==LK info ==
 Build time:
 Apr 12 2017
 14:53:45
+```
 
---------------------------------------------------------------------------------
-
-** Analyzing header of lk.bin (file size is 501572) - Header is 512
-				 		                      ImgSize            Name
+## Analyzing header of lk.bin (file size is 501572) - Header is 512
+```
+                                  ImgSize            Name
 0000000          58881688        0007a544        00006b6c        00000000
-                            		   501060			         kl
+                                  501060              kl
 0000016          00000000        00000000        00000000        00000000
 0000032          00000000        00000000        ffffffff        ffffffff
 0000048          58891689        00000200        00000001        00000000
@@ -21,9 +22,9 @@ Apr 12 2017
 0000080          ffffffff        ffffffff        ffffffff        ffffffff
 *
 0000512          ea000007        ea0066c4        ea0066ca        ea0066d0
-
-** Header is using MTK struct:
-
+```
+## Header is using MTK struct:
+```
 #define PART_MAGIC          0x58881688
 typedef union {
     struct {    
@@ -35,8 +36,10 @@ typedef union {
     unsigned char data[BLK_SIZE];
 } part_hdr_t;
 
+More info: http://git.huayusoft.com/tomsu/AP7350_MDK-kernel/blob/f5622b43b5612a6be1ad649093d5d6cedf598bc4/bootable/bootloader/lk/platform/mt6735/include/platform/partition.h
+```
 --------------------------------------------------------------------------------
-
+```
 $ binwalk lk.bin 
 
 DECIMAL       HEXADECIMAL     DESCRIPTION
@@ -58,11 +61,11 @@ DECIMAL       HEXADECIMAL     DESCRIPTION
 433763        0x69E63         Unix path: /openssl/crypto/x509v3/v3_crld.c
 434699        0x6A20B         Unix path: /openssl/crypto/x509v3/v3_ncons.c
 440984        0x6BA98         SHA256 hash constants, little endian
-
+```
 --------------------------------------------------------------------------------
 
-** Extracted OEM commands from lk.bin.
-
+## Extracted OEM commands from lk.bin.
+```
 sub_41e1cc6c("oem p2u", *0x41e7a3f8, 0x1, 0x0);
 sub_41e1cc6c("oem LCM", *0x41e7a1e0, 0x1, 0x0);
 sub_41e1cc6c("oem HALT", *0x41e7a374, 0x1, 0x0);
@@ -85,3 +88,4 @@ sub_41e1cc6c("oem lks", *0x41e7a2c8, 0x1, 0x0);
 sub_41e1cc6c("flashing unlock", *0x41e7a380, 0x1, 0x0);
 sub_41e1cc6c("flashing lock", *0x41e7a338, 0x1, 0x0);
 sub_41e1cc6c("flashing get_unlock_ability", *0x41e7a16c, 0x1, 0x0);
+```
