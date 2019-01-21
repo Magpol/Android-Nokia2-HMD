@@ -1,5 +1,13 @@
 # Android-Nokia3-HMD
 
+Target device was a Nokia 3 (ta-1032). Encrypted and locked with an unknown passcode. 
+
+At the time for the investigation there was no known way of gaining access to the device without
+knowing the passcode. There was also no known way of unlocking the bootloader, with or without wiping userdata.
+
+A firmware update was then released by HMD. It was downloaded and extracted for analysis. Below are some samples from the
+process.
+
 ## lk.bin extracted from NOKIA 3 firmware:
 ```
 MT6737M__Unknown__Heart__Unknown__7.0__alps-mp-n0.mp1-V1.0.2_fih6737m.35.n_P96
@@ -89,3 +97,12 @@ sub_41e1cc6c("flashing unlock", *0x41e7a380, 0x1, 0x0);
 sub_41e1cc6c("flashing lock", *0x41e7a338, 0x1, 0x0);
 sub_41e1cc6c("flashing get_unlock_ability", *0x41e7a16c, 0x1, 0x0);
 ```
+## oem HALT
+
+After analysis of the firmware and some basic tests with the device i noticed that a ADB-interface showed up for a small timeframe when starting up the device from powered off. Further analysis of the firmware showed that the command "fastboot oem HALT" actually halted the boot-process. When trying the command i got access to a fastboot-interface.
+
+The fastboot-interface was in a state where no verification of uploaded images was made, hence i could now upload a modified recovery- / boot.img. A modified ramdisk was created and patched to the existing boot.img. 
+
+With the modified ramdisk active an exploit in the verfication process was triggered and the device was unlocked.
+
+All data on the device was intact and extracted.
