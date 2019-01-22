@@ -2,11 +2,11 @@
 
 Target device was a Nokia 3 (ta-1032). Encrypted and locked with an unknown passcode. 
 
-At the time for the investigation there was no known way of gaining access to the device without
+At the time for the investigation (2017) there was no known way of gaining access to the device without
 knowing the passcode. There was also no known way of unlocking the bootloader, with or without wiping userdata.
 
 A firmware update was then released by HMD. It was downloaded and extracted for analysis. Below are some samples from the
-process.
+process. I also managed to make a dump of the unit with Infinity-box MTK module.
 
 ## lk.bin extracted from NOKIA 3 firmware:
 ```
@@ -97,9 +97,12 @@ sub_41e1cc6c("flashing unlock", *0x41e7a380, 0x1, 0x0);
 sub_41e1cc6c("flashing lock", *0x41e7a338, 0x1, 0x0);
 sub_41e1cc6c("flashing get_unlock_ability", *0x41e7a16c, 0x1, 0x0);
 ```
-## oem HALT
+## oem alive
+After some analysis of the lk.bin i found out that the phone supported two custom boot-modes "reboot-ftm" and "reboot-ftm-pass". Analysis of the "oem alive" command showed that it paused the execution flow.
 
-After analysis of the firmware and some basic tests with the device i noticed that a ADB-interface showed up for a small timeframe when starting up the device from powered off. Further analysis of the firmware showed that the command "fastboot oem HALT" actually halted the boot-process. When trying the command i got access to a fastboot-interface.
+After some basic tests i noticed that a unknown interface showed up in my kern.log for a small timeframe when pluging in the device from powered off. I installed Nokias own VCOM drivers and then a "ADB-interface" showed up.
+
+I then turned off the phone, disconnected it, wrote the command "fastboot reboot-ftm-pass" and plugged in the phone (still turned off). The fastboot command executed when the interface was available and it rebooted the phone. I then executed the command "fastboot oem alive" and it halted the boot-process. The result was that i got access to a stable fastboot interface.
 
 The fastboot-interface was in a state where no verification of uploaded images was made, hence i could now upload a modified recovery- / boot.img. A modified ramdisk was created and patched to the existing boot.img. 
 
